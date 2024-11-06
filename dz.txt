@@ -1,0 +1,213 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+struct Artifact {
+    string name;
+    string description;
+    bool obtained;
+};
+
+void startGame();
+void fight();
+void darkPath();
+void lightPath();
+void labyrinthPath();
+void waitPart();
+void gameOver();
+void victory();
+void twistEnding();
+void tragicEnding();
+void showInstructions();
+void exitGame();
+void displayArtifacts();
+void obtainArtifact(int artifactIndex);
+
+vector<Artifact> artifacts = {
+    {"Меч силы", "Этот меч дает владельцу невероятную силу.", false},
+    {"Щит защиты", "Щит, который защищает от любого удара.", false},
+    {"Камень мудрости", "Камень, который открывает доступ к древним знаниям.", false},
+    {"Амулет бессмертия", "Амулет, который защищает от смерти.", false}
+};
+
+int main() {
+    int choice;
+    
+    while (true) {
+        cout << "\n*** Главное меню ***\n";
+        cout << "1. Играть\n";
+        cout << "2. Показать инструкцию\n";
+        cout << "3. Выход\n";
+        cout << "Введите номер опции: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            startGame();
+        }
+        else if (choice == 2) {
+            showInstructions();
+        }
+        else if (choice == 3) {
+            exitGame();
+            break;
+        }
+        else {
+            cout << "Неверный выбор, попробуйте снова.\n";
+        }
+    }
+
+    return 0;
+}
+
+void startGame() {
+    char choice;
+    cout << "Ты оказался в комнате с 5 дверями. Тебе нужно выбрать путь (с-светлая дверь, т-темная дверь, о-окровавленная дверь, л-дверь с картинкой лабиринта, ж-переждать в комнате): ";
+    cin >> choice;
+
+    if (choice == 'с') {
+        lightPath();
+    }
+    else if (choice == 'т') {
+        darkPath();
+    }
+    else if (choice == 'о') {
+        fight();
+    }
+    else if (choice == 'л') {
+        labyrinthPath();
+    }
+    else if (choice == 'ж') {
+        waitPart();
+    }
+    else {
+        cout << "Неверный выбор!\n";
+        startGame();
+    }
+}
+
+void fight() {
+    char choice;
+    cout << "Вы встретили врага! Будете сражаться или бежать? (с-сражаться, б-бежать): ";
+    cin >> choice;
+    if (choice == 'с') {
+        cout << "Ты сразил врага своей красотой (ну оружия у тебя то не было)\n";
+        obtainArtifact(0);
+        victory();
+    }
+    else if (choice == 'б') {
+        cout << "Вы попытались убежать, но враг был быстрее\n";
+        gameOver();
+    }
+    else {
+        cout << "Неверный выбор!\n";
+        fight();
+    }
+}
+
+void darkPath() {
+    char choice;
+    cout << "Вы выбрали темный путь и упали в ловушку. Вы увидели рыцаря, который начал говорить, что вам предстоит выбор: остаться здесь или пройти испытания.\n";
+    cout << "Вы хотите остаться или испытать судьбу? (о-остаться / и-испытания): ";
+    cin >> choice;
+
+    if (choice == 'о') {
+        cout << "Вы решили остаться, и рыцарь стал вашим другом. Вместе вы вернулись домой, но теперь у вас есть сила защищать мир!\n";
+        obtainArtifact(1);
+        victory();
+    }
+    else if (choice == 'и') {
+        twistEnding();
+    }
+    else {
+        cout << "Неверный выбор!\n";
+        darkPath();
+    }
+}
+
+void lightPath() {
+    cout << "Вы выбрали светлый путь и ослепли, падая в пропасть...\n";
+    gameOver();
+}
+
+void labyrinthPath() {
+    cout << "Вы заблудились в лабиринте и умерли от голода.\n";
+    gameOver();
+}
+
+void waitPart() {
+    cout << "Из-за двери выходит молодой рыцарь в кольчужной броне. Он сначала потянулся к своему мечу, но вы его успокоили, и вы стали друзьями!\n";
+    obtainArtifact(2);
+    victory();
+}
+
+void gameOver() {
+    cout << "Игра окончена, вы умерли. Возможно, это был конец вашего пути...\n";
+}
+
+void victory() {
+    cout << "Поздравляем! Вы успешно прошли игру!\n";
+    displayArtifacts();
+}
+
+void twistEnding() {
+    cout << "Неожиданно, вы попали в другой мир. Рыцарь предложил вам выбрать: остаться здесь и стать великим героем, или вернуться в реальность.\n";
+    char choice;
+    cout << "Что вы выберете? (о-остаться / в-вернуться): ";
+    cin >> choice;
+
+    if (choice == 'о') {
+        obtainArtifact(3);
+        cout << "Вы остались в другом мире, став великим героем. Но все же не смогли найти покоя...\n";
+        tragicEnding();
+    }
+    else if (choice == 'в') {
+        cout << "Вы вернулись домой, но мир вокруг стал для вас чужим, и вы так и не нашли своего места.\n";
+        tragicEnding();
+    }
+    else {
+        cout << "Неверный выбор!\n";
+        twistEnding();
+    }
+}
+
+void tragicEnding() {
+    cout << "Конец... Возможно, все, что вы пережили, было лишь иллюзией. Но теперь вы один, и ничто не может вернуть то, что было.\n";
+}
+
+void showInstructions() {
+    cout << "\n*** Инструкция по игре ***\n";
+    cout << "Ты оказываешься в загадочной комнате с несколькими дверями, за каждой из которых скрываются разные пути.\n";
+    cout << "Тебе нужно выбрать, какой путь тебе предстоит пройти: светлый, темный или полный опасностей. Тебе предстоит сделать выбор,\n";
+    cout << "который будет влиять на дальнейшее развитие событий.\n";
+    cout << "В некоторых случаях тебе предстоит сразиться с врагами, а в других — заблудиться в лабиринте.\n";
+    cout << "Цель игры — выбрать правильный путь и выйти победителем!\n";
+    cout << "Будь осторожен, выбор всегда имеет последствия!\n";
+}
+
+void exitGame() {
+    cout << "Выход из игры... До свидания!\n";
+}
+
+void obtainArtifact(int artifactIndex) {
+    if (!artifacts[artifactIndex].obtained) {
+        artifacts[artifactIndex].obtained = true;
+        cout << "Вы получили артефакт: " << artifacts[artifactIndex].name << "!\n";
+        cout << "Описание: " << artifacts[artifactIndex].description << "\n";
+    }
+}
+
+void displayArtifacts() {
+    cout << "\n*** Ваши артефакты ***\n";
+    bool hasArtifacts = false;
+    for (const auto& artifact : artifacts) {
+        if (artifact.obtained) {
+            cout << artifact.name << " - " << artifact.description << "\n";
+            hasArtifacts = true;
+        }
+    }
+    if (!hasArtifacts) {
+        cout << "У вас нет артефактов.\n";
+    }
+}
